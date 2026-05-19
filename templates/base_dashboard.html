@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <div class="logo-mark">SM</div>
+            <div class="logo-text">
+                <div class="logo-title">SchoolMS</div>
+                <div class="logo-subtitle">{{ user.get_full_name|default:user.username }}</div>
+            </div>
+        </div>
+        <nav>
+            {% if user.role == 'admin' or user.is_superuser or user.is_staff %}
+            <a class="{% if request.path == '/admin-panel/' %}active{% endif %}" href="{% url 'admin_panel_dashboard' %}">Dashboard</a>
+            <a class="{% if request.path|slice:':18' == '/admin-panel/users' %}active{% endif %}" href="{% url 'admin_users' %}">Users</a>
+            <a class="{% if request.path|slice:':20' == '/admin-panel/classes' %}active{% endif %}" href="{% url 'admin_classes' %}">Classes</a>
+            <a class="{% if request.path|slice:':21' == '/admin-panel/subjects' %}active{% endif %}" href="{% url 'admin_subjects' %}">Subjects</a>
+            <a class="{% if request.path|slice:':20' == '/admin-panel/reports' %}active{% endif %}" href="{% url 'admin_reports' %}">Reports</a>
+            <a href="http://localhost/phpmyadmin/" target="_blank" rel="noopener noreferrer">Database</a>
+            {% elif user.role == 'teacher' %}
+            <a class="{% if request.path == '/teacher/' %}active{% endif %}" href="{% url 'teacher_dashboard' %}">Dashboard</a>
+            <a class="{% if request.path|slice:':16' == '/teacher/courses' %}active{% endif %}" href="{% url 'teacher_courses' %}">Courses</a>
+            <a class="{% if request.path|slice:':18' == '/teacher/students' %}active{% endif %}" href="{% url 'teacher_students' %}">Students</a>
+            <a class="{% if request.path|slice:':16' == '/teacher/grades' %}active{% endif %}" href="{% url 'teacher_grades' %}">Grades</a>
+            <a class="{% if request.path|slice:':20' == '/teacher/attendance' %}active{% endif %}" href="{% url 'teacher_attendance' %}">Attendance</a>
+            {% elif user.role == 'student' %}
+            <a class="{% if request.path == '/student/' %}active{% endif %}" href="{% url 'student_dashboard' %}">Dashboard</a>
+            <a class="{% if request.path|slice:':15' == '/student/grades' %}active{% endif %}" href="{% url 'student_grades' %}">Grades</a>
+            <a class="{% if request.path|slice:':19' == '/student/attendance' %}active{% endif %}" href="{% url 'student_attendance' %}">Attendance</a>
+            <a class="{% if request.path|slice:':17' == '/student/schedule' %}active{% endif %}" href="{% url 'student_schedule' %}">Schedule</a>
+            {% elif user.role == 'parent' %}
+            <a class="{% if request.path == '/parent/' %}active{% endif %}" href="{% url 'parent_dashboard' %}">Dashboard</a>
+            {% if user.parent_profile.children.first %}
+            <a class="{% if request.path|slice:':16' == '/parent/progress' %}active{% endif %}" href="{% url 'parent_progress' user.parent_profile.children.first.id %}">Progress</a>
+            {% endif %}
+            {% endif %}
+        </nav>
+    </aside>
+    <section class="main">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="icon-btn" id="sidebar-toggle" type="button" aria-label="Toggle sidebar">
+                    <span class="hamburger"></span>
+                </button>
+                <div class="topbar-title">
+                    <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+                    <div class="topbar-meta">
+                        {% if user.is_superuser or user.is_staff %}Admin{% else %}{{ user.role|title }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="user-pill">
+                    <div class="avatar" aria-hidden="true">{{ user.username|slice:":1"|upper }}</div>
+                    <div class="user-pill-text">
+                        <div class="user-name">{{ user.get_full_name|default:user.username }}</div>
+                        <div class="user-username">@{{ user.username }}</div>
+                    </div>
+                </div>
+                <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+            </div>
+        </header>
+        <div class="content-wrap">
+            {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" data-auto-dismiss="true">{{ message }}</div>
+            {% endfor %}
+            {% block content %}{% endblock %}
+        </div>
+    </section>
+</div>
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

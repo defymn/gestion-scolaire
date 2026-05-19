@@ -1,0 +1,23 @@
+{% extends 'base_dashboard.html' %}
+{% block page_title %}Reports{% endblock %}
+{% block content %}
+<div class="card">
+    <a class="btn btn-primary" href="{% url 'admin_reports' %}?export=csv">Export CSV</a>
+</div>
+<div class="card">
+    <canvas id="report-chart" height="120"></canvas>
+    <table class="table" id="report-table">
+        <thead><tr><th>Class</th><th>Students</th><th>Average Grade</th><th>Attendance %</th></tr></thead>
+        <tbody>
+        {% for row in class_rows %}
+        <tr data-label="{{ row.class_name }}" data-value="{{ row.attendance_pct }}">
+            <td>{{ row.class_name }}</td>
+            <td>{{ row.students_count }}</td>
+            <td>{% if row.avg_grade %}{{ row.avg_grade }}{% else %}N/A{% endif %}</td>
+            <td>{{ row.attendance_pct }}%</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

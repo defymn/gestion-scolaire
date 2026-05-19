@@ -1,0 +1,22 @@
+{% extends 'base_dashboard.html' %}
+{% block page_title %}Attendance{% endblock %}
+{% block content %}
+<div class="card"><a class="btn btn-primary" href="{% url 'teacher_attendance_add' %}">Mark Attendance</a></div>
+<div class="card">
+    <table class="table">
+        <thead><tr><th>Date</th><th>Student</th><th>Course</th><th>Status</th><th>Note</th><th></th></tr></thead>
+        <tbody>
+        {% for r in attendance_records %}
+        <tr>
+            <td>{{ r.date }}</td>
+            <td>{{ r.student.user.get_full_name }}</td>
+            <td>{{ r.course.name }}</td>
+            <td><span class="badge-{{ r.status }}">{{ r.status }}</span></td>
+            <td>{{ r.note }}</td>
+            <td><a class="btn btn-secondary" href="{% url 'teacher_attendance_edit' r.pk %}">Edit</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

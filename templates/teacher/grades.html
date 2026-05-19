@@ -1,0 +1,29 @@
+{% extends 'base_dashboard.html' %}
+{% block page_title %}Grades{% endblock %}
+{% block content %}
+<div class="card">
+    <form method="get" class="toolbar">
+        <select name="course">
+            <option value="">All courses</option>
+            {% for c in courses %}
+            <option value="{{ c.id }}" {% if selected_course == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
+            {% endfor %}
+        </select>
+        <button class="btn btn-secondary" type="submit">Filter</button>
+        <a class="btn btn-primary" href="{% url 'teacher_grade_add' %}">Add Grade</a>
+    </form>
+</div>
+<div class="card">
+    <table class="table">
+        <thead><tr><th>Student</th><th>Course</th><th>Type</th><th>Value</th><th>Date</th><th></th></tr></thead>
+        <tbody>
+        {% for g in grades %}
+        <tr>
+            <td>{{ g.student.user.get_full_name }}</td><td>{{ g.course.name }}</td><td>{{ g.grade_type }}</td><td>{{ g.value }}</td><td>{{ g.date_recorded|date:"Y-m-d" }}</td>
+            <td><a class="btn btn-secondary" href="{% url 'teacher_grade_edit' g.id %}">Edit</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

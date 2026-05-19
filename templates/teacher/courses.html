@@ -1,0 +1,31 @@
+{% extends 'base_dashboard.html' %}
+{% block page_title %}My Courses{% endblock %}
+{% block content %}
+<p class="muted" style="margin-top:-.5rem;">Cours et classes où vous enseignez — mêmes groupes que pour vos élèves.</p>
+<div class="card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Matière</th>
+                <th>Classe / groupe</th>
+                <th>Élèves</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in courses %}
+            <tr>
+                <td>{{ c.course_id }}</td>
+                <td>{{ c.name }}</td>
+                <td>{{ c.class_group }}</td>
+                <td>{{ c.student_count }}</td>
+                <td><a class="btn btn-secondary" href="{% url 'teacher_grades' %}?course={{ c.id }}">Notes</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">Aucun cours assigné à votre compte.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base_dashboard.html' %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="card">
+{% if record %}
+    <form method="post">
+        {% csrf_token %}
+        <p>{{ record.student.user.get_full_name }} - {{ record.course.name }} ({{ record.date }})</p>
+        <div class="form-group">
+            <label>Status</label>
+            <select name="status">
+                <option value="present" {% if record.status == 'present' %}selected{% endif %}>Present</option>
+                <option value="absent" {% if record.status == 'absent' %}selected{% endif %}>Absent</option>
+                <option value="late" {% if record.status == 'late' %}selected{% endif %}>Late</option>
+            </select>
+        </div>
+        <div class="form-group"><label>Note</label><textarea name="note">{{ record.note }}</textarea></div>
+        <button class="btn btn-primary" type="submit">Save</button>
+    </form>
+{% else %}
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<small class="error">{{ field.errors|join:', ' }}</small>{% endif %}
+        </div>
+        {% endfor %}
+        <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
+            <button class="btn btn-secondary" name="load_students" type="submit">Load Students</button>
+            {% if formset.forms %}
+            <button class="btn btn-secondary" id="select-all-present" type="button">Select All Present</button>
+            {% endif %}
+        </div>
+        {% if formset.forms %}
+            {{ formset.management_form }}
+            <div class="card" style="margin-top:1rem;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width:42%;">Student</th>
+                            <th style="width:18%;">Status</th>
+                            <th>Note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            {% for row in formset %}
+                        <tr class="attendance-row">
+                            <td>
+                                {{ row.student_id }}
+                                {{ row.student_name }}
+                            </td>
+                            <td>{{ row.status }}</td>
+                            <td>{{ row.note }}</td>
+                        </tr>
+            {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn btn-primary" type="submit" style="margin-top:.75rem;">Save Attendance</button>
+        {% endif %}
+    </form>
+{% endif %}
+</div>
+{% endblock %}

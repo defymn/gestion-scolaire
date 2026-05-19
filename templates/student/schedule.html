@@ -1,0 +1,22 @@
+{% extends 'base_dashboard.html' %}
+{% block page_title %}Weekly Schedule{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="schedule-grid" id="schedule-grid">
+        {% for day in days %}
+        <div class="schedule-col" data-day="{{ day }}">
+            <h4>{{ day }}</h4>
+            {% for s in schedules %}
+                {% if s.day == day %}
+                <div class="card mini">
+                    <strong>{{ s.course.name }}</strong><br>
+                    {{ s.start_time }} - {{ s.end_time }}<br>
+                    Room {{ s.room }}
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

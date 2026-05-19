@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card auth">
+    <h1>Create account</h1>
+    <p class="muted" style="margin-top:-.5rem;">Sign up to access your dashboard.</p>
+    <form method="post">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <div class="error">{{ field.errors }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <button class="btn btn-primary" type="submit">Create account</button>
+    </form>
+    <p class="muted" style="margin:1rem 0 0;">
+        Already have an account?
+        <a href="{% url 'login' %}" style="font-weight:700;">Sign in</a>
+    </p>
+</section>
+{% endblock %}
+

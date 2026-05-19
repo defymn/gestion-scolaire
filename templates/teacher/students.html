@@ -1,0 +1,24 @@
+{% extends 'base_dashboard.html' %}
+{% block page_title %}My Students{% endblock %}
+{% block content %}
+<p class="muted" style="margin-top:-.5rem;">Élèves des groupes où vous avez au moins un cours assigné.</p>
+{% regroup students by class_group as by_class %}
+{% for class in by_class %}
+<div class="card" style="margin-bottom:1rem;">
+    <h3 style="margin-top:0;font-size:1rem;">{{ class.grouper }}</h3>
+    <table class="table">
+        <thead><tr><th>ID</th><th>Name</th></tr></thead>
+        <tbody>
+        {% for s in class.list %}
+        <tr>
+            <td>{{ s.student_id }}</td>
+            <td>{{ s.user.get_full_name|default:s.user.username }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% empty %}
+<div class="card"><p class="muted">Aucun élève dans les classes de vos cours.</p></div>
+{% endfor %}
+{% endblock %}

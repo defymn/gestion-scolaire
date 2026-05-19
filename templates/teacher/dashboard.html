@@ -1,0 +1,28 @@
+{% extends 'base_dashboard.html' %}
+{% block page_title %}Teacher Dashboard{% endblock %}
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card"><h3>{{ students_count }}</h3><p>Students</p></div>
+    <div class="stat-card"><h3>{{ courses_count }}</h3><p>Courses</p></div>
+    <div class="stat-card"><h3>{{ grades_this_month }}</h3><p>Grades This Month</p></div>
+    <div class="stat-card"><h3>{{ pending_grades }}</h3><p>Pending Grades</p></div>
+</div>
+<div class="card" style="margin-top:1rem;">
+    <h3 style="margin-top:0;">Mes cours et classes</h3>
+    <table class="table">
+        <thead><tr><th>Matière</th><th>Classe / groupe</th><th>Élèves</th><th></th></tr></thead>
+        <tbody>
+            {% for c in my_courses %}
+            <tr>
+                <td><strong>{{ c.name }}</strong><br><span class="muted">{{ c.course_id }}</span></td>
+                <td>{{ c.class_group }}</td>
+                <td>{{ c.student_count }}</td>
+                <td><a class="btn btn-secondary" href="{% url 'teacher_grades' %}?course={{ c.id }}">Notes</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">Aucun cours assigné.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

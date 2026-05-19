@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card auth">
+    <h1>Student profile required</h1>
+    <p class="muted" style="margin-top:-.5rem;">
+        Your account is marked as a student, but a student profile wasn’t found.
+        Please contact an administrator to complete your profile, or sign up again and fill in the required student fields.
+    </p>
+    <div style="display:flex; gap:.6rem; margin-top:1rem;">
+        <a class="btn btn-secondary" href="{% url 'logout' %}">Logout</a>
+        <a class="btn btn-primary" href="{% url 'login' %}">Back to login</a>
+    </div>
+</section>
+{% endblock %}
+

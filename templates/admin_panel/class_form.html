@@ -1,0 +1,18 @@
+{% extends 'base_dashboard.html' %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" name="name" value="{% if class_group %}{{ class_group.name }}{% endif %}" required>
+        </div>
+        <div class="form-group">
+            <label>Year</label>
+            <input type="number" name="year" value="{% if class_group %}{{ class_group.year }}{% endif %}" required>
+        </div>
+        <button class="btn btn-primary" type="submit">Save</button>
+    </form>
+</div>
+{% endblock %}

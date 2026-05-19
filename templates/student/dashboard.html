@@ -1,0 +1,9 @@
+{% extends 'base_dashboard.html' %}
+{% block page_title %}Student Dashboard{% endblock %}
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card"><h3>{% if avg_grade %}{{ avg_grade|floatformat:2 }}{% else %}N/A{% endif %}</h3><p>Average Grade</p></div>
+    <div class="stat-card"><h3>{{ attendance_percent|floatformat:1 }}%</h3><p>Attendance</p></div>
+    <div class="stat-card"><h3>{% if next_class %}{{ next_class.course.name }}{% else %}No Class{% endif %}</h3><p>Next Class</p></div>
+</div>
+{% endblock %}

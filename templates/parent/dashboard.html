@@ -1,0 +1,14 @@
+{% extends 'base_dashboard.html' %}
+{% block page_title %}Parent Dashboard{% endblock %}
+{% block content %}
+<div class="stats-grid">
+    {% for item in child_cards %}
+    <div class="card">
+        <h3>{{ item.child.user.get_full_name }}</h3>
+        <p>Average grade: {% if item.avg_grade %}{{ item.avg_grade|floatformat:2 }}{% else %}N/A{% endif %}</p>
+        <p>Attendance: {{ item.attendance_percent|floatformat:1 }}%</p>
+        <a class="btn btn-primary" href="{% url 'parent_progress' item.child.id %}">View Progress</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

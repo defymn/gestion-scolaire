@@ -1,0 +1,19 @@
+{% extends 'base_dashboard.html' %}
+{% block page_title %}My Grades{% endblock %}
+{% block content %}
+{% for item in grouped_data %}
+<div class="card">
+    <h3>{{ item.course.name }} (Average: {% if item.average %}{{ item.average|floatformat:2 }}{% else %}N/A{% endif %})</h3>
+    <table class="table">
+        <thead><tr><th>Type</th><th>Value</th><th>Comment</th><th>Date</th></tr></thead>
+        <tbody>
+        {% for grade in item.grades %}
+        <tr><td>{{ grade.grade_type }}</td><td>{{ grade.value }}</td><td>{{ grade.comment }}</td><td>{{ grade.date_recorded|date:"Y-m-d" }}</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% empty %}
+<div class="card">No grades available.</div>
+{% endfor %}
+{% endblock %}
